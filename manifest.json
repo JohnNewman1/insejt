@@ -1,0 +1,20 @@
+{
+  "name": "insejt",
+  "version": "0.01",
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_title": "Insejt"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+      "storage"
+  ]
+}
