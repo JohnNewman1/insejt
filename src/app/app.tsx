@@ -1,6 +1,7 @@
 import { h,  FunctionComponent } from "preact";
 import { useState } from 'preact/hooks';
 import { HistoryItem } from "./types";
+import HistoryTable from "./historyTable";
 
 
 const App: FunctionComponent = () => {
@@ -31,11 +32,10 @@ const App: FunctionComponent = () => {
     setHistory(historyItems)
   };
 
-  const listItems = history.map((link) => <li>{JSON.stringify(link)}</li>)
   return (
       <div id="app-root">
           <button onClick={checkOutSomeHistory}>Check History</button>
-          <ul>{listItems}</ul>
+          <HistoryTable historyItems={history} />
       </div>
   )
 }

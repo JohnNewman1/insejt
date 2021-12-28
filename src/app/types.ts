@@ -9,7 +9,7 @@ export interface HistoryItem {
     title?: string;
     url?: string;
     typedCount?: number;
-    vistCount?: number;
+    visitCount?: number;
     visits?: ChromeVisitItem[];
 }
 
