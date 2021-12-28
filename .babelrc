@@ -14,6 +14,12 @@
             { 
                 "pragma":"h" 
             }
+        ],
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "regenerator": true
+            }
         ]
     ]
 }
