@@ -1,0 +1,36 @@
+{
+  "name": "insejt",
+  "version": "1.0.0",
+  "description": "I Forgot that webpage I was on",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack && npm run copy:dist && npm run copy:images",
+    "copy:dist": "cp ./src/popup.html manifest.json ./dist",
+    "copy:images": "cp -R ./images ./dist"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.16.5",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.6",
+    "typescript": "^4.5.4",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "preact": "^10.6.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnNewman1/insejt.git"
+  },
+  "author": "newmanj903@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnNewman1/insejt/issues"
+  },
+  "homepage": "https://github.com/JohnNewman1/insejt#readme"
+}
