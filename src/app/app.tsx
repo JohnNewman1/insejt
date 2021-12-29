@@ -1,11 +1,13 @@
 import { h,  FunctionComponent } from "preact";
 import { useState } from 'preact/hooks';
-import { HistoryItem } from "./types";
+import { ChromeVisitItem, HistoryItem } from "./types";
 import HistoryTable from "./historyTable";
+import { transformChromeHistoryItem } from "./utils/historyItem";
 
 
 const App: FunctionComponent = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [visits, setVisits] = useState<ChromeVisitItem[]>([]);
 
   const checkOutSomeHistory = async () => {
     const microsecondsPerDay= 1000 * 60 * 60 * 24;
@@ -16,19 +18,15 @@ const App: FunctionComponent = () => {
       maxResults: 10000
     });
     const historyItems = [];
+    const allVisits = []
     for(let i = 0; i < chromeHistoryItems.length; i++) {
       const historyItem = chromeHistoryItems[i];
-      const item = {
-        id: historyItem.id,
-        lastVisitTime: historyItem.lastVisitTime,
-        title: historyItem.title,
-        url: historyItem.url,
-        typedCount: historyItem.typedCount,
-        visitCount: historyItem.visitCount,
-        visits: await chrome.history.getVisits({ url: historyItem.url })
-      };
-      historyItems.push(item);
+      const visits = await chrome.history.getVisits({url: historyItem.url});
+      allVisits.push(visits);
+      historyItems.push(transformChromeHistoryItem(historyItem));
     }
+
+    setVisits(allVisits.flat());
     setHistory(historyItems)
   };
 

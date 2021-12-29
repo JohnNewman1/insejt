@@ -13,3 +13,12 @@ export interface HistoryItem {
     visits?: ChromeVisitItem[];
 }
 
+export interface VisitItem {
+    id: number
+    historyItemId: string;
+    transition: string
+    visitTime: number;
+    referringVisitId?: number
+    referrerDetails?: string 
+}
+
