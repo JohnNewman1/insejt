@@ -1,4 +1,4 @@
-import { ChromeHistoryItem, HistoryItem, VisitItem } from "../types";
+import { ChromeHistoryItem, ChromeVisitItem, HistoryItem, VisitItem } from "../types";
 
 export const transformChromeHistoryItem = (historyItem: ChromeHistoryItem): HistoryItem => { 
       return {
@@ -11,8 +11,8 @@ export const transformChromeHistoryItem = (historyItem: ChromeHistoryItem): Hist
       };
 }
 
-export const findHistoryItemFromVisitId = (history: HistoryItem[], visits: VisitItem[], visitId: number): HistoryItem => {
-    const historyItemId = visits.find(visit => visit.referringVisitId === visitId).historyItemId;
+export const findReferrerHistoryItem = (history: HistoryItem[], visits: ChromeVisitItem[], reffererId: string): HistoryItem => {
+    const historyItemId = visits.find(visit => visit.visitId === reffererId).id;
     if (!historyItemId) return;
 
     return history.find(historyItem => historyItem.id === historyItemId);

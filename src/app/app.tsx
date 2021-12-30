@@ -10,7 +10,7 @@ const App: FunctionComponent = () => {
   const [visits, setVisits] = useState<ChromeVisitItem[]>([]);
 
   const checkOutSomeHistory = async () => {
-    const microsecondsPerDay= 1000 * 60 * 60 * 24;
+    const microsecondsPerDay = 1000 * 60 * 60 * 24;
     const oneDayAgo = (new Date).getTime() - microsecondsPerDay;
     const chromeHistoryItems = await chrome.history.search({
       'text': '',              

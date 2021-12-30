@@ -1,8 +1,8 @@
 import { internet, date, datatype } from 'faker';
 import { Factory } from 'rosie';
-import type { ChromeHistoryItem } from '../../src/app/types';
+import type { HistoryItem } from '../../src/app/types';
 
-export const chromeHistoryItemFactory = Factory.define<ChromeHistoryItem>('ChromeHistoryItemFactory').attrs({
+export const historyItemFactory = Factory.define<HistoryItem>('ChromeHistoryItemFactory').attrs({
     id: datatype.number().toString(),
     lastVisitTime: date.past().getTime(),
     title: internet.domainName(),
