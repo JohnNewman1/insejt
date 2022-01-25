@@ -16,7 +16,7 @@ const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem}: His
   }
 
   return (
-        <tr>
+        <tr key={historyItem.id}>
           <th>{historyItem.id}</th>
           <th>{convertUTCtoLocalTime(historyItem.lastVisitTime)}</th>
           <th>{historyItem.title}</th>

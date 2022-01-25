@@ -6,7 +6,6 @@ type HistoryTableProps = {
     historyItems: HistoryItem[];
   };
 
-
 const HistoryTable: FunctionComponent<HistoryTableProps> = ({historyItems}: HistoryTableProps) => {
 
   return (

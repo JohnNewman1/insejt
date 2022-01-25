@@ -2,6 +2,7 @@ export type ChromeHistoryItem = chrome.history.HistoryItem;
 
 export type ChromeVisitItem = chrome.history.VisitItem;
 export type Url = chrome.history.Url;
+export type OrderBy = 'asc' | 'desc';
 
 export interface HistoryItem {
     id: string;
