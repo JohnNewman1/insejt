@@ -3,6 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { ChromeVisitItem, HistoryItem, OrderBy } from "./types";
 import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
+import { sortBy } from "./utils/historyQuery";
 
 
 const App: FunctionComponent = () => {
@@ -32,24 +33,14 @@ const App: FunctionComponent = () => {
     populateState();
 }, []);
 
-useEffect(() => { 
-     console.log('Updated State', history)
-  }, [history])
-
-const sortBy = (key: string, order: OrderBy = 'asc') => {
-    let newHistory = [...history]; 
-
-    if (order === 'asc') {
-       newHistory = newHistory.sort((a,b) => (a[key] > b[key]) ? 1 : ((b[key] > a[key]) ? -1 : 0))
-    } else {
-       newHistory = newHistory.sort((a,b) => (a[key] < b[key]) ? 1 : ((b[key] < a[key]) ? -1 : 0))
-    }
-    setHistory(newHistory);
+const setMostPopular = () => {
+  const mostPopularHistory = sortBy(history, 'visitCount', 'desc')
+  setHistory(mostPopularHistory);
 }
 
   return (
       <div id="app-root">
-          <button onClick={() => sortBy('visitCount', 'desc')}>Most Popular</button>
+          <button onClick={() => setMostPopular()}>Most Popular</button>
 
           <HistoryTable historyItems={history} />
       </div>
