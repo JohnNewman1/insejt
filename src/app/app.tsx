@@ -4,6 +4,7 @@ import { ChromeVisitItem, HistoryItem, OrderBy } from "./types";
 import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
 import { excludeUrl, sortBy } from "./utils/historyQuery";
+import Container from "@mui/material/Container";
 
 
 const App: FunctionComponent = () => {
@@ -49,11 +50,11 @@ const setMostPopular = () => {
 }
 
   return (
-      <div id="app-root">
+      <Container>
           <button onClick={() => setMostPopular()}>Most Popular</button>
 
           <HistoryTable historyItems={history} />
-      </div>
+      </Container>
   )
 }
 
