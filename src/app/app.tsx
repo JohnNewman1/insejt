@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { ChromeVisitItem, HistoryItem, OrderBy } from "./types";
 import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
-import { sortBy } from "./utils/historyQuery";
+import { excludeUrl, sortBy } from "./utils/historyQuery";
 
 
 const App: FunctionComponent = () => {
@@ -27,11 +27,21 @@ const App: FunctionComponent = () => {
         allVisits.push(visits);
         historyItems.push(transformChromeHistoryItem(historyItem));
       }
+      const excludedItems = excludeUrls(historyItems);
       setVisits(allVisits.flat());
-      setHistory(historyItems)
+      setHistory(excludedItems)
     }
     populateState();
 }, []);
+
+const excludeUrls = (historyItems: HistoryItem[]) => {
+  const excludedUrls = ['google', 'facebook', 'youtube'];
+  let newHistoryItems = [...historyItems]
+  excludedUrls.forEach(url => {
+     newHistoryItems = excludeUrl(newHistoryItems, url);
+  })
+  return newHistoryItems
+}
 
 const setMostPopular = () => {
   const mostPopularHistory = sortBy(history, 'visitCount', 'desc')

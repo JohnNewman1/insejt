@@ -2,9 +2,8 @@ import { HistoryItem, OrderBy } from "../types";
 
 
 export const excludeUrl = (history: HistoryItem[], url: string): HistoryItem[] => {
-    const regexStrin = `/url/`
-
-    return history
+    const includesUrl = new RegExp(url)
+    return history.filter(item => !includesUrl.test(item.url))
 }
 
 export const sortBy = (history: HistoryItem[], key: string, order: OrderBy = 'asc'): HistoryItem[] => {
