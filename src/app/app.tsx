@@ -37,11 +37,7 @@ const App: FunctionComponent = () => {
 
 const excludeUrls = (historyItems: HistoryItem[]) => {
   const excludedUrls = ['google', 'facebook', 'youtube'];
-  let newHistoryItems = [...historyItems]
-  excludedUrls.forEach(url => {
-     newHistoryItems = excludeUrl(newHistoryItems, url);
-  })
-  return newHistoryItems
+  return excludeUrl(historyItems, excludedUrls);
 }
 
 const setMostPopular = () => {
@@ -50,7 +46,7 @@ const setMostPopular = () => {
 }
 
   return (
-      <Container>
+      <Container fixed sx={{ width: '375px' }} >
           <button onClick={() => setMostPopular()}>Most Popular</button>
 
           <HistoryTable historyItems={history} />
