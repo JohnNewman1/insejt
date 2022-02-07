@@ -5,11 +5,13 @@ import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
 import { excludeUrl, sortBy } from "./utils/historyQuery";
 import Container from "@mui/material/Container";
-
+import Header from "./Header";
+import MainMenu from "./MainMenu";
 
 const App: FunctionComponent = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [visits, setVisits] = useState<ChromeVisitItem[]>([]);
+  const [displayMenu, setDisplayMenu] = useState(true);
 
   useEffect(() => {
     const populateState = async () => {
@@ -46,10 +48,15 @@ const setMostPopular = () => {
 }
 
   return (
-      <Container fixed sx={{ width: '375px' }} >
-          <button onClick={() => setMostPopular()}>Most Popular</button>
+      <Container fixed sx={{ width: '375px' }} disableGutters={true} >
+        <Header />
+        {displayMenu &&
+        <MainMenu setMenu={setDisplayMenu} /> 
+        }
 
+        {!displayMenu &&
           <HistoryTable historyItems={history} />
+        }
       </Container>
   )
 }
