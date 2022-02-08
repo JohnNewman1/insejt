@@ -62,7 +62,7 @@ const buttonStyle = {
 
         <Header />
         {displayMenu &&
-        <MainMenu setMenu={setDisplayMenu} /> 
+        <MainMenu setMenu={setDisplayMenu} setMostPopular={setMostPopular} /> 
         }
 
         {!displayMenu &&

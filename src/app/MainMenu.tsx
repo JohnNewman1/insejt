@@ -5,22 +5,29 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import StarIcon from '@mui/icons-material/Star';
+import GoogleIcon from '@mui/icons-material/Google';
 
 type MainMenuProps = {
   setMenu: (bool: boolean) => void;
+  setMostPopular: () => void;
 };
 
-const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu}: MainMenuProps) => {
+const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular}: MainMenuProps) => {
 
+  const clickMostPopular = () => {
+    setMostPopular();
+    setMenu(false);
+  };
 
   return (
     <Box sx={{ width: '100%', maxWidth: 375, bgcolor: 'background.paper' }}>
     <nav aria-label="main mailbox folders">
       <List>
-        <ListItem onClick={() => setMenu(false)} disablePadding>
+        <ListItem onClick={() => clickMostPopular()} disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              Icon
+              <StarIcon/>
             </ListItemIcon>
             <ListItemText primary="Most Popular" />
           </ListItemButton>
@@ -28,6 +35,7 @@ const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu}: MainMenuProps) =>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
+              <GoogleIcon/>
             </ListItemIcon>
             <ListItemText primary="Google Searches" />
           </ListItemButton>
