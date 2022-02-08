@@ -7,6 +7,8 @@ import { excludeUrl, sortBy } from "./utils/historyQuery";
 import Container from "@mui/material/Container";
 import Header from "./Header";
 import MainMenu from "./MainMenu";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from "@mui/material";
 
 const App: FunctionComponent = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -47,13 +49,29 @@ const setMostPopular = () => {
   setHistory(mostPopularHistory);
 }
 
+const buttonStyle = {
+  position: 'absolute',
+  top: '-25px',
+  right: '25px',
+  backgroundColor: '#536DFE',
+  zIndex: 3
+}
+
   return (
       <Container fixed sx={{ width: '375px' }} disableGutters={true} >
+
         <Header />
         {displayMenu &&
         <MainMenu setMenu={setDisplayMenu} /> 
         }
 
+        {!displayMenu &&
+          <div style={{position: 'relative'}}>
+           <IconButton aria-label="Back" onClick={() => setDisplayMenu(true)} style={buttonStyle} sx={{ boxShadow: 3 }} >
+             <ArrowBackIcon style={{color: 'white'}}/>
+           </IconButton>
+          </div>
+      }
         {!displayMenu &&
           <HistoryTable historyItems={history} />
         }
