@@ -31,7 +31,7 @@ const App: FunctionComponent = () => {
         const historyItem = chromeHistoryItems[i];
         const visits = await chrome.history.getVisits({url: historyItem.url});
         allVisits.push(visits);
-        historyItems.push(transformChromeHistoryItem(historyItem));
+        historyItems.push(transformChromeHistoryItem(historyItem, visits));
       }
       setVisits(allVisits.flat());
       setOriginalHistory(historyItems)
@@ -51,7 +51,13 @@ const setMostPopular = () => {
 }
 
 const setGoogleSearches = () => {
+  // This is a spike of how to get all the links clicked from a particular google search. 
   const googleItems = googleSearches(originalHistory);
+  const visitIds = googleItems[0].visits.map(visit => visit.visitId)
+  const referredVisits = visits.filter(visit => visitIds.includes(visit.referringVisitId)).map(visit => visit.id);
+  const visitedFromGoogleSearch = originalHistory.filter(historyItem => referredVisits.includes(historyItem.id));
+  console.log(visitedFromGoogleSearch);
+
   setHistory(googleItems);
 }
 

@@ -1,6 +1,6 @@
 import { ChromeHistoryItem, ChromeVisitItem, HistoryItem, VisitItem } from "../types";
 
-export const transformChromeHistoryItem = (historyItem: ChromeHistoryItem): HistoryItem => { 
+export const transformChromeHistoryItem = (historyItem: ChromeHistoryItem, visits): HistoryItem => { 
       return {
         id: historyItem.id,
         lastVisitTime: historyItem.lastVisitTime,
@@ -8,6 +8,7 @@ export const transformChromeHistoryItem = (historyItem: ChromeHistoryItem): Hist
         url: historyItem.url,
         typedCount: historyItem.typedCount,
         visitCount: historyItem.visitCount,
+        visits: visits,
       };
 }
 
