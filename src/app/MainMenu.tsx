@@ -11,12 +11,19 @@ import GoogleIcon from '@mui/icons-material/Google';
 type MainMenuProps = {
   setMenu: (bool: boolean) => void;
   setMostPopular: () => void;
+  setGoogle: () => void;
 };
 
-const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular}: MainMenuProps) => {
+const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular, setGoogle}: MainMenuProps) => {
 
   const clickMostPopular = () => {
     setMostPopular();
+    setMenu(false);
+  };
+
+  const clickGoogleSearches = () => {
+    console.log('ere')
+    setGoogle();
     setMenu(false);
   };
 
@@ -32,7 +39,7 @@ const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular}: M
             <ListItemText primary="Most Popular" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        <ListItem onClick={() => clickGoogleSearches()} disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <GoogleIcon/>

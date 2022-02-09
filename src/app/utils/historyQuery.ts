@@ -5,6 +5,10 @@ export const excludeUrl = (history: HistoryItem[], urls: string[]): HistoryItem[
     const includesUrl = new RegExp(`(${urls.join('|')})`);
     return history.filter(item => !includesUrl.test(item.url))
 }
+export const googleSearches = (history: HistoryItem[]): HistoryItem[] => {
+    const includesGoogle = /Google\sSearch/
+    return history.filter(item => includesGoogle.test(item.title))
+}
 
 export const sortBy = (history: HistoryItem[], key: string, order: OrderBy = 'asc'): HistoryItem[] => {
     const newHistory = [...history]; 

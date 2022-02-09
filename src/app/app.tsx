@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks';
 import { ChromeVisitItem, HistoryItem, OrderBy } from "./types";
 import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
-import { excludeUrl, sortBy } from "./utils/historyQuery";
+import { excludeUrl, googleSearches, sortBy } from "./utils/historyQuery";
 import Container from "@mui/material/Container";
 import Header from "./Header";
 import MainMenu from "./MainMenu";
@@ -11,6 +11,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton } from "@mui/material";
 
 const App: FunctionComponent = () => {
+  const [originalHistory, setOriginalHistory] = useState<HistoryItem[]>([]);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [visits, setVisits] = useState<ChromeVisitItem[]>([]);
   const [displayMenu, setDisplayMenu] = useState(true);
@@ -32,9 +33,8 @@ const App: FunctionComponent = () => {
         allVisits.push(visits);
         historyItems.push(transformChromeHistoryItem(historyItem));
       }
-      const excludedItems = excludeUrls(historyItems);
       setVisits(allVisits.flat());
-      setHistory(excludedItems)
+      setOriginalHistory(historyItems)
     }
     populateState();
 }, []);
@@ -45,8 +45,14 @@ const excludeUrls = (historyItems: HistoryItem[]) => {
 }
 
 const setMostPopular = () => {
-  const mostPopularHistory = sortBy(history, 'visitCount', 'desc')
+  const excludedItems = excludeUrls(originalHistory);
+  const mostPopularHistory = sortBy(excludedItems, 'visitCount', 'desc')
   setHistory(mostPopularHistory);
+}
+
+const setGoogleSearches = () => {
+  const googleItems = googleSearches(originalHistory);
+  setHistory(googleItems);
 }
 
 const buttonStyle = {
@@ -62,7 +68,7 @@ const buttonStyle = {
 
         <Header />
         {displayMenu &&
-        <MainMenu setMenu={setDisplayMenu} setMostPopular={setMostPopular} /> 
+        <MainMenu setMenu={setDisplayMenu} setMostPopular={setMostPopular} setGoogle={setGoogleSearches} /> 
         }
 
         {!displayMenu &&
