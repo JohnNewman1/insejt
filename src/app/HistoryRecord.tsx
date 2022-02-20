@@ -1,26 +1,35 @@
 import { h,  FunctionComponent } from "preact";
 import { HistoryItem } from "./types";
-import { convertUTCtoLocalTime, hhmm } from "./utils/date";
+import { hhmm } from "./utils/date";
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
+import { HistoryRecordType } from "./constants";
 
 type HistoryRecordProps = {
   historyItem: HistoryItem
+  historyRecordType?: HistoryRecordType
+  clickItem?: (historyItem: HistoryItem) => void
 }
 
-const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem}: HistoryRecordProps) => {
+const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem, historyRecordType, clickItem}: HistoryRecordProps) => {
 
-  const shortenString = (url: string) => {
-    if(url.length > 30) {
-      return url.substring(0, 30) + '...';
+  const shortenString = (string: string) => {
+    if(string.length > 30) {
+      return string.substring(0, 30) + '...';
     }
-    return url;
+    return string;
   }
+
+  const extractGoogleSearchTerm = (title: string) => {
+    return title.split('- Google Search')[0];
+  }
+
   const titleStyle = {
     padding: '8px',
     minWidth: '70%'
   }
+
   const timeStyle = {
     padding: '8px',
     minWidth: '30%'
@@ -28,11 +37,16 @@ const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem}: His
 
   return (
         <TableRow hover role="checkbox" tabIndex={-1} key={historyItem.id}>
+          {{historyRecordType}}
           <Tooltip title={historyItem.title} placement="top">
-            <TableCell style={titleStyle} align="left">
+            <TableCell onClick={() => clickItem(historyItem)} style={titleStyle} align="left">
+              {historyRecordType === HistoryRecordType.DEFAULT && 
               <a href={historyItem.url} target="_blank" style={{textDecoration: 'none'}}>
                 {historyItem.title.length > 0 ? shortenString(historyItem.title) : shortenString(historyItem.url)}
-              </a>
+              </a>}
+              {historyRecordType === HistoryRecordType.GOOGLE_SEARCH && 
+                shortenString((extractGoogleSearchTerm(historyItem.title)))
+              }
             </TableCell>
           </Tooltip>
           <TableCell style={timeStyle} align="left">
@@ -40,6 +54,10 @@ const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem}: His
           </TableCell>
         </TableRow>
   )
+}
+
+HistoryRecord.defaultProps = {
+  historyRecordType: HistoryRecordType.DEFAULT
 }
 
 export default HistoryRecord;

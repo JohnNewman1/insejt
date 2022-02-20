@@ -9,29 +9,18 @@ import StarIcon from '@mui/icons-material/Star';
 import GoogleIcon from '@mui/icons-material/Google';
 
 type MainMenuProps = {
-  setMenu: (bool: boolean) => void;
   setMostPopular: () => void;
   setGoogle: () => void;
 };
 
-const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular, setGoogle}: MainMenuProps) => {
+const MainMenu: FunctionComponent<MainMenuProps> = ({setMostPopular, setGoogle}: MainMenuProps) => {
 
-  const clickMostPopular = () => {
-    setMostPopular();
-    setMenu(false);
-  };
-
-  const clickGoogleSearches = () => {
-    console.log('ere')
-    setGoogle();
-    setMenu(false);
-  };
 
   return (
     <Box sx={{ width: '100%', maxWidth: 375, bgcolor: 'background.paper' }}>
     <nav aria-label="main mailbox folders">
       <List>
-        <ListItem onClick={() => clickMostPopular()} disablePadding>
+        <ListItem onClick={() => setMostPopular()} disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <StarIcon/>
@@ -39,7 +28,7 @@ const MainMenu: FunctionComponent<MainMenuProps> = ({setMenu, setMostPopular, se
             <ListItemText primary="Most Popular" />
           </ListItemButton>
         </ListItem>
-        <ListItem onClick={() => clickGoogleSearches()} disablePadding>
+        <ListItem onClick={() => setGoogle()} disablePadding>
           <ListItemButton>
             <ListItemIcon>
               <GoogleIcon/>
