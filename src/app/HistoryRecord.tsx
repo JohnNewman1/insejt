@@ -14,50 +14,51 @@ type HistoryRecordProps = {
 
 const HistoryRecord: FunctionComponent<HistoryRecordProps> = ({historyItem, historyRecordType, clickItem}: HistoryRecordProps) => {
 
-  const shortenString = (string: string) => {
-    if(string.length > 30) {
-      return string.substring(0, 30) + '...';
-    }
-    return string;
-  }
+	const shortenString = (string: string) => {
+		if(string.length > 30) {
+			return `${string.substring(0, 30)  }...`;
+		}
+		return string;
+	}
 
-  const extractGoogleSearchTerm = (title: string) => {
-    return title.split('- Google Search')[0];
-  }
+	const extractGoogleSearchTerm = (title: string) => {
+		return title.split('- Google Search')[0];
+	}
 
-  const titleStyle = {
-    padding: '8px',
-    minWidth: '70%'
-  }
+	const titleStyle = {
+		padding: '8px',
+		minWidth: '70%',
+		cursor: 'pointer'
+	}
 
-  const timeStyle = {
-    padding: '8px',
-    minWidth: '30%'
-  }
+	const timeStyle = {
+		padding: '8px',
+		minWidth: '30%'
+	}
 
-  return (
-        <TableRow hover role="checkbox" tabIndex={-1} key={historyItem.id}>
-          {{historyRecordType}}
-          <Tooltip title={historyItem.title} placement="top">
-            <TableCell onClick={() => clickItem(historyItem)} style={titleStyle} align="left">
-              {historyRecordType === HistoryRecordType.DEFAULT && 
-              <a href={historyItem.url} target="_blank" style={{textDecoration: 'none'}}>
-                {historyItem.title.length > 0 ? shortenString(historyItem.title) : shortenString(historyItem.url)}
-              </a>}
-              {historyRecordType === HistoryRecordType.GOOGLE_SEARCH && 
+	return (
+		<TableRow hover role="checkbox" tabIndex={-1} key={historyItem.id}>
+			{{historyRecordType}}
+			<Tooltip title={historyItem.title} placement="top">
+				<TableCell onClick={() => clickItem(historyItem)} style={titleStyle} align="left">
+					{historyRecordType === HistoryRecordType.DEFAULT && 
+					<a href={historyItem.url} target="_blank" style={{textDecoration: 'none'}} rel="noreferrer">
+						{historyItem.title.length > 0 ? shortenString(historyItem.title) : shortenString(historyItem.url)}
+					</a>}
+					{historyRecordType === HistoryRecordType.GOOGLE_SEARCH && 
                 shortenString((extractGoogleSearchTerm(historyItem.title)))
-              }
-            </TableCell>
-          </Tooltip>
-          <TableCell style={timeStyle} align="left">
-            {hhmm(historyItem.lastVisitTime)}
-          </TableCell>
-        </TableRow>
-  )
+					}
+				</TableCell>
+			</Tooltip>
+			<TableCell style={timeStyle} align="left">
+				{hhmm(historyItem.lastVisitTime)}
+			</TableCell>
+		</TableRow>
+	)
 }
 
 HistoryRecord.defaultProps = {
-  historyRecordType: HistoryRecordType.DEFAULT
+	historyRecordType: HistoryRecordType.DEFAULT
 }
 
 export default HistoryRecord;

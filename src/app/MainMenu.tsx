@@ -16,30 +16,30 @@ type MainMenuProps = {
 const MainMenu: FunctionComponent<MainMenuProps> = ({setMostPopular, setGoogle}: MainMenuProps) => {
 
 
-  return (
-    <Box sx={{ width: '100%', maxWidth: 375, bgcolor: 'background.paper' }}>
-    <nav aria-label="main mailbox folders">
-      <List>
-        <ListItem onClick={() => setMostPopular()} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <StarIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Most Popular" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem onClick={() => setGoogle()} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <GoogleIcon/>
-            </ListItemIcon>
-            <ListItemText primary="Google Searches" />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </nav>
-  </Box>
-  )
+	return (
+		<Box sx={{ width: '100%', maxWidth: 375, bgcolor: 'background.paper' }}>
+			<nav aria-label="main mailbox folders">
+				<List>
+					<ListItem onClick={() => setMostPopular()} disablePadding>
+						<ListItemButton>
+							<ListItemIcon>
+								<StarIcon />
+							</ListItemIcon>
+							<ListItemText primary="Most Popular" />
+						</ListItemButton>
+					</ListItem>
+					<ListItem onClick={() => setGoogle()} disablePadding>
+						<ListItemButton>
+							<ListItemIcon>
+								<GoogleIcon />
+							</ListItemIcon>
+							<ListItemText primary="Google Searches" />
+						</ListItemButton>
+					</ListItem>
+				</List>
+			</nav>
+		</Box>
+	)
 }
 
 export default MainMenu;
