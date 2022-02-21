@@ -57,6 +57,10 @@ const App: FunctionComponent = () => {
 		const mostPopularHistory = sortBy(excludedItems, 'visitCount', 'desc')
 		setHistory(mostPopularHistory);
 	}
+	const setMostRecent = () => {
+		setView(Views.HISTORY_LIST)
+		setHistory(originalHistory);
+	}
 
 	const setGoogleSearches = () => {
 		setView(Views.GOOGLE_SEARCH);
@@ -78,7 +82,7 @@ const App: FunctionComponent = () => {
 
 			<Header />
 			{view === Views.MAIN_MENU  &&
-			<MainMenu setMostPopular={setMostPopular} setGoogle={setGoogleSearches} /> 
+			<MainMenu setMostRecent={setMostRecent} setMostPopular={setMostPopular} setGoogle={setGoogleSearches} /> 
 			}
 
 			{view !== Views.MAIN_MENU && 
