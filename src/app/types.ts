@@ -23,3 +23,6 @@ export interface VisitItem {
     referrerDetails?: string 
 }
 
+export interface SettingsConfig {
+    range?: string
+}

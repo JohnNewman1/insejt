@@ -1,6 +1,6 @@
 import { h,  FunctionComponent } from "preact";
-import { useEffect, useState } from 'preact/hooks';
-import { ChromeVisitItem, HistoryItem } from "./types";
+import { useCallback, useEffect, useState } from 'preact/hooks';
+import { ChromeVisitItem, HistoryItem, SettingsConfig } from "./types";
 import { transformChromeHistoryItem } from "./utils/historyItem";
 import HistoryTable from "./HistoryTable";
 import { excludeUrl, googleSearches, sortBy } from "./utils/historyQuery";
@@ -9,8 +9,9 @@ import Header from "./Header";
 import MainMenu from "./MainMenu";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton } from "@mui/material";
-import { Views } from "./constants";
+import { DEFAULT_SETTINGS, Views } from "./constants";
 import GoogleSearches from "./GoogleSearches";
+import Settings from "./Settings";
 
 const App: FunctionComponent = () => {
 	const [originalHistory, setOriginalHistory] = useState<HistoryItem[]>([]);
@@ -18,55 +19,78 @@ const App: FunctionComponent = () => {
 	const [googleItems, setGoogleItems] = useState<HistoryItem[][]>([]);
 	const [visits, setVisits] = useState<ChromeVisitItem[]>([]);
 	const [view, setView] = useState(Views.MAIN_MENU);
+	const [showSettingsIcon, setShowSettingsIcon] = useState(true);
+	const [settingsConfig, setSettingsConfig] = useState<SettingsConfig>()
+
+	const populateState = useCallback(async () => {
+		const settings = await getSettings();
+		const microsecondsPerDay = 1000 * 60 * 60 * parseInt(settings.range, 10);
+		const oneDayAgo = (new Date).getTime() - microsecondsPerDay;
+		const chromeHistoryItems = await chrome.history.search({
+			text: '',              
+			startTime: oneDayAgo,
+			maxResults: 10000
+		});
+		const historyItems = [];
+		const allVisits = []
+		for(let i = 0; i < chromeHistoryItems.length; i++) {
+			const historyItem = chromeHistoryItems[i];
+			const visits = await chrome.history.getVisits({url: historyItem.url});
+			allVisits.push(visits);
+			historyItems.push(transformChromeHistoryItem(historyItem, visits));
+		}
+		console.log('completed populating')
+		setVisits(allVisits.flat());
+		setOriginalHistory(historyItems)
+	}, [])
 
 	useEffect(() => {
-		const populateState = async () => {
-			const microsecondsPerDay = 1000 * 60 * 60 * 24;
-			const oneDayAgo = (new Date).getTime() - microsecondsPerDay;
-			const chromeHistoryItems = await chrome.history.search({
-				text: '',              
-				startTime: oneDayAgo,
-				maxResults: 10000
-			});
-			const historyItems = [];
-			const allVisits = []
-			for(let i = 0; i < chromeHistoryItems.length; i++) {
-				const historyItem = chromeHistoryItems[i];
-				const visits = await chrome.history.getVisits({url: historyItem.url});
-				allVisits.push(visits);
-				historyItems.push(transformChromeHistoryItem(historyItem, visits));
-			}
-			setVisits(allVisits.flat());
-			setOriginalHistory(historyItems)
-		}
 		populateState();
-	}, []);
+	}, [populateState]);
 
 	const excludeUrls = (historyItems: HistoryItem[]) => {
 		const excludedUrls = ['google', 'facebook', 'youtube'];
 		return excludeUrl(historyItems, excludedUrls);
 	}
 
+	const getSettings = async () => {
+		const settings: SettingsConfig  = {}
+		const range = await chrome.storage.local.get('range')
+		settings.range = range.range || DEFAULT_SETTINGS.range;
+		setSettingsConfig(settings)
+		return settings;
+	}
+
 	const goBack = () => {
+		if (view === Views.SETTINGS) populateState();
 		setView(Views.MAIN_MENU);
+		setShowSettingsIcon(true);
 	}
 
 	const setMostPopular = () => {
 		setView(Views.HISTORY_LIST)
 		const excludedItems = excludeUrls(originalHistory);
 		const mostPopularHistory = sortBy(excludedItems, 'visitCount', 'desc')
+		setShowSettingsIcon(false);
 		setHistory(mostPopularHistory);
 	}
 	const setMostRecent = () => {
 		setView(Views.HISTORY_LIST)
+		setShowSettingsIcon(false);
 		setHistory(originalHistory);
 	}
 
 	const setGoogleSearches = () => {
 		setView(Views.GOOGLE_SEARCH);
 		const googleItems = googleSearches(originalHistory);
-		console.log(googleItems);
+		setShowSettingsIcon(false);
 		setGoogleItems(googleItems);
+	}
+
+	const goToSettingsPage = () => {
+		setView(Views.SETTINGS)
+		setShowSettingsIcon(false);
+
 	}
 
 	const buttonStyle = {
@@ -80,7 +104,7 @@ const App: FunctionComponent = () => {
 	return (
 		<Container fixed sx={{ width: '375px' }} disableGutters={true} >
 
-			<Header />
+			<Header showSettingsIcon={showSettingsIcon} goToSettingsPage={goToSettingsPage} />
 			{view === Views.MAIN_MENU  &&
 			<MainMenu setMostRecent={setMostRecent} setMostPopular={setMostPopular} setGoogle={setGoogleSearches} /> 
 			}
@@ -97,6 +121,9 @@ const App: FunctionComponent = () => {
 			}
 			{view === Views.GOOGLE_SEARCH &&
 			<GoogleSearches groupedSearches={googleItems} originalHistory={originalHistory} visits={visits} />
+			}
+			{view === Views.SETTINGS &&
+			<Settings settingsConfig={settingsConfig} />
 			}
 		</Container>
 	)

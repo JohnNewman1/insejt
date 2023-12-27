@@ -37,6 +37,7 @@ const GoogleSearches: FunctionComponent<GoogleSearchesProps> = ({groupedSearches
 		}, [])
 		const referredVisits = visits.filter(visit => visitIds.includes(visit.referringVisitId)).map(visit => visit.id);
 		const visitedFromGoogleSearch = originalHistory.filter(historyItem => referredVisits.includes(historyItem.id));
+		console.log(visitedFromGoogleSearch)
 		setSearchItems(visitedFromGoogleSearch);
 	}
 

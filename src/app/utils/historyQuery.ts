@@ -13,8 +13,8 @@ export const googleSearches = (history: HistoryItem[]): HistoryItem[][] => {
 
 const groupArrayOfObjects = <T>(list: T[], key: string): T[][] => {
 	return list.reduce((output, item) => {
-		const indexOfSeach = output.findIndex((googles) => googles[0][key] === item[key]);
-		indexOfSeach === -1 ? output.push([item]) : output[indexOfSeach].push(item);
+		const indexOfSearch = output.findIndex((googles) => googles[0][key] === item[key]);
+		indexOfSearch === -1 ? output.push([item]) : output[indexOfSearch].push(item);
 		return output;
 	}, []);
 };
