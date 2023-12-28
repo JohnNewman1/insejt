@@ -49,14 +49,17 @@ const App: FunctionComponent = () => {
 	}, [populateState]);
 
 	const excludeUrls = (historyItems: HistoryItem[]) => {
-		const excludedUrls = ['google', 'facebook', 'youtube'];
+		const excludedUrls = settingsConfig.excludeList.split(',')
+		console.log(excludedUrls)
 		return excludeUrl(historyItems, excludedUrls);
 	}
 
 	const getSettings = async () => {
 		const settings: SettingsConfig  = {}
-		const range = await chrome.storage.local.get('range')
-		settings.range = range.range || DEFAULT_SETTINGS.range;
+		const localSettings = await chrome.storage.local.get('settings')
+		console.log(localSettings)
+		settings.range = localSettings?.settings?.range || DEFAULT_SETTINGS.range;
+		settings.excludeList = localSettings?.settings?.excludeList || DEFAULT_SETTINGS.excludeList;
 		setSettingsConfig(settings)
 		return settings;
 	}
@@ -70,6 +73,7 @@ const App: FunctionComponent = () => {
 	const setMostPopular = () => {
 		setView(Views.HISTORY_LIST)
 		const excludedItems = excludeUrls(originalHistory);
+		console.log(excludedItems)
 		const mostPopularHistory = sortBy(excludedItems, 'visitCount', 'desc')
 		setShowSettingsIcon(false);
 		setHistory(mostPopularHistory);
@@ -109,7 +113,7 @@ const App: FunctionComponent = () => {
 			<MainMenu setMostRecent={setMostRecent} setMostPopular={setMostPopular} setGoogle={setGoogleSearches} /> 
 			}
 
-			{view !== Views.MAIN_MENU && 
+			{view !== Views.MAIN_MENU && view !== Views.SETTINGS && 
 			<div style={{position: 'relative'}}>
 				<IconButton aria-label="Back" onClick={() => goBack()} style={buttonStyle} sx={{ boxShadow: 3 }} >
 					<ArrowBackIcon style={{color: 'white'}} />
@@ -123,7 +127,7 @@ const App: FunctionComponent = () => {
 			<GoogleSearches groupedSearches={googleItems} originalHistory={originalHistory} visits={visits} />
 			}
 			{view === Views.SETTINGS &&
-			<Settings settingsConfig={settingsConfig} />
+			<Settings settingsConfig={settingsConfig} goBack={goBack} />
 			}
 		</Container>
 	)

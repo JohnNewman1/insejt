@@ -11,5 +11,6 @@ export enum HistoryRecordType {
 }
 
 export const DEFAULT_SETTINGS = {
-	range: '24'
+	range: '24',
+	excludeList: ''
 }

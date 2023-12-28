@@ -24,5 +24,6 @@ export interface VisitItem {
 }
 
 export interface SettingsConfig {
-    range?: string
+    range?: string,
+    excludeList?: string
 }
